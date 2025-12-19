@@ -12,12 +12,37 @@ const logEntriesDiv = document.getElementById('log-entries');
 const statsFiles = document.getElementById('stats-files');
 const statsSize = document.getElementById('stats-size');
 const statsLogs = document.getElementById('stats-logs');
+const themeToggle = document.getElementById('theme-toggle');
 
 // Auto-refresh interval
 let autoRefreshInterval = null;
 
+// Theme management
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+}
+
+function setTheme(theme) {
+    if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.querySelector('.theme-icon').textContent = '☀️';
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggle.querySelector('.theme-icon').textContent = '🌙';
+    }
+    localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
     loadLogFiles();
     loadStats();
     loadLogs();
@@ -27,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logFileSelect.addEventListener('change', () => loadLogs());
     linesSelect.addEventListener('change', () => loadLogs());
     levelSelect.addEventListener('change', () => loadLogs());
+    themeToggle.addEventListener('click', toggleTheme);
     
     // Debounced search
     let searchTimeout;

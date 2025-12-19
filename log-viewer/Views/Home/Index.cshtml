@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syslog Viewer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="~/style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>📋 Syslog Viewer</h1>
-            <div class="stats">
-                <span id="stats-files">Files: -</span>
-                <span id="stats-size">Size: -</span>
-                <span id="stats-logs">Logs: -</span>
+            <div class="header-right">
+                <div class="stats">
+                    <span id="stats-files">Files: -</span>
+                    <span id="stats-size">Size: -</span>
+                    <span id="stats-logs">Logs: -</span>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" title="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
             </div>
         </header>
 
@@ -78,6 +83,6 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="~/script.js"></script>
 </body>
 </html>
