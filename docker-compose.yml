@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  syslog-server:
+    build:
+      context: ./syslog-server
+      dockerfile: Dockerfile
+    container_name: syslog-server
+    hostname: syslog-server
+    ports:
+      - "514:514/udp"
+      - "514:514/tcp"
+      - "601:601/tcp"
+    networks:
+      - syslog-net
+    volumes:
+      - syslog-logs:/var/log/remote
+
+  syslog-client:
+    build:
+      context: ./syslog-client
+      dockerfile: Dockerfile
+    container_name: syslog-client
+    hostname: syslog-client
+    depends_on:
+      - syslog-server
+    networks:
+      - syslog-net
+    volumes:
+      - ./syslog-client/scripts:/scripts
+    environment:
+      - SYSLOG_SERVER=syslog-server
+      - SYSLOG_PORT=514
+
+  log-viewer:
+    build:
+      context: ./log-viewer
+      dockerfile: Dockerfile
+    container_name: log-viewer
+    hostname: log-viewer
+    ports:
+      - "3000:8080"
+    depends_on:
+      - syslog-server
+    networks:
+      - syslog-net
+    volumes:
+      - syslog-logs:/var/log/remote:ro
+
+networks:
+  syslog-net:
+    driver: bridge
+
+volumes:
+  syslog-logs:
